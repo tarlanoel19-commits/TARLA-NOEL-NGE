@@ -1,0 +1,43 @@
+{
+  "name": "simple-task-windows-app",
+  "version": "1.0.0",
+  "description": "A lightweight Windows desktop task app built with Electron, HTML, CSS, and JavaScript.",
+  "main": "main.js",
+  "private": true,
+  "author": "TARLA NOEL NGE",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "build:win": "electron-builder --win portable --x64",
+    "pack": "electron-builder --dir"
+  },
+  "devDependencies": {
+    "electron": "^44.5.1",
+    "electron-builder": "^26.15.3"
+  },
+  "build": {
+    "appId": "com.tarlanoel.simpletaskapp",
+    "productName": "Simple Task App",
+    "asar": true,
+    "files": [
+      "index.html",
+      "main.js",
+      "preload.js",
+      "package.json"
+    ],
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "artifactName": "Simple-Task-App-${version}-Windows-${arch}.${ext}"
+    }
+  }
+}
