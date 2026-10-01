@@ -1,0 +1,787 @@
+<!doctype html>
+<html>
+<head>
+  <title>Simple Task App</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=11" />
+  <HTA:APPLICATION
+    ID="SimpleTaskApp"
+    APPLICATIONNAME="Simple Task App"
+    BORDER="thin"
+    CAPTION="yes"
+    ICON=""
+    MAXIMIZEBUTTON="yes"
+    MINIMIZEBUTTON="yes"
+    SCROLL="yes"
+    SHOWINTASKBAR="yes"
+    SINGLEINSTANCE="yes"
+    SYSMENU="yes"
+    WINDOWSTATE="normal"
+  />
+  <style>
+    /* Portable Windows HTA version: double-click this file on Windows to run. */
+    html, body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: #f4f7fb;
+      color: #172033;
+    }
+
+    body.dark {
+      background: #101827;
+      color: #f8fafc;
+    }
+
+    .app {
+      width: 94%;
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 22px 0;
+    }
+
+    .hero {
+      display: table;
+      width: 100%;
+      margin-bottom: 16px;
+    }
+
+    .hero-text,
+    .hero-actions {
+      display: table-cell;
+      vertical-align: top;
+    }
+
+    .hero-actions {
+      text-align: right;
+      width: 260px;
+      white-space: nowrap;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 42px;
+      line-height: 1;
+      letter-spacing: -2px;
+    }
+
+    .subtitle {
+      margin: 8px 0 0;
+      color: #64748b;
+      font-size: 15px;
+    }
+
+    body.dark .subtitle,
+    body.dark label,
+    body.dark .muted {
+      color: #cbd5e1;
+    }
+
+    .panel {
+      overflow: hidden;
+      border: 1px solid #dbe3ef;
+      border-radius: 18px;
+      background: #ffffff;
+      box-shadow: 0 18px 50px rgba(15, 23, 42, 0.12);
+    }
+
+    body.dark .panel {
+      border-color: #334155;
+      background: #182235;
+      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+    }
+
+    .form {
+      padding: 14px;
+      border-bottom: 1px solid #dbe3ef;
+    }
+
+    body.dark .form,
+    body.dark .toolbar,
+    body.dark .status {
+      border-color: #334155;
+    }
+
+    .row {
+      clear: both;
+      overflow: hidden;
+      margin: 0 -6px 10px;
+    }
+
+    .field {
+      float: left;
+      width: 25%;
+      padding: 0 6px;
+      box-sizing: border-box;
+    }
+
+    .field.wide {
+      width: 50%;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: #64748b;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      box-sizing: border-box;
+      border: 1px solid #dbe3ef;
+      border-radius: 12px;
+      background: #f1f5f9;
+      color: #172033;
+      padding: 10px;
+      font-family: "Segoe UI", Arial, sans-serif;
+      font-size: 14px;
+    }
+
+    textarea {
+      height: 42px;
+      resize: vertical;
+    }
+
+    body.dark input,
+    body.dark textarea,
+    body.dark select {
+      border-color: #334155;
+      background: #223049;
+      color: #f8fafc;
+    }
+
+    .toolbar {
+      overflow: hidden;
+      padding: 12px 14px;
+      border-bottom: 1px solid #dbe3ef;
+      background: #f8fafc;
+    }
+
+    body.dark .toolbar,
+    body.dark .status {
+      background: #111827;
+    }
+
+    .filters {
+      float: left;
+    }
+
+    .sorter {
+      float: right;
+      color: #64748b;
+      font-weight: 700;
+    }
+
+    .sorter select {
+      width: 150px;
+      margin-left: 6px;
+      padding: 7px;
+      border-radius: 999px;
+    }
+
+    button {
+      border: 1px solid #dbe3ef;
+      border-radius: 999px;
+      background: #ffffff;
+      color: #172033;
+      padding: 9px 13px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: "Segoe UI", Arial, sans-serif;
+    }
+
+    button.primary {
+      border-color: #2563eb;
+      background: #2563eb;
+      color: #ffffff;
+    }
+
+    button.danger {
+      border-color: #ef4444;
+      color: #ef4444;
+    }
+
+    button.active {
+      border-color: #2563eb;
+      background: #2563eb;
+      color: #ffffff;
+    }
+
+    body.dark button {
+      border-color: #334155;
+      background: #223049;
+      color: #f8fafc;
+    }
+
+    body.dark button.primary,
+    body.dark button.active {
+      border-color: #60a5fa;
+      background: #3b82f6;
+      color: #ffffff;
+    }
+
+    .form-actions {
+      overflow: hidden;
+      clear: both;
+      padding-top: 4px;
+    }
+
+    .form-note {
+      float: left;
+      color: #64748b;
+      font-size: 13px;
+      line-height: 36px;
+    }
+
+    .buttons-right {
+      float: right;
+    }
+
+    #taskList {
+      margin: 0;
+      padding: 0;
+    }
+
+    .task-card {
+      overflow: hidden;
+      padding: 14px;
+      border-bottom: 1px solid #dbe3ef;
+      background: #ffffff;
+    }
+
+    body.dark .task-card {
+      border-color: #334155;
+      background: #182235;
+    }
+
+    .task-card.completed {
+      opacity: 0.66;
+    }
+
+    .task-card.completed .task-title,
+    .task-card.completed .task-desc {
+      text-decoration: line-through;
+    }
+
+    .task-check {
+      float: left;
+      width: 24px;
+      padding-top: 7px;
+    }
+
+    .task-check input {
+      width: auto;
+    }
+
+    .task-main {
+      margin-left: 34px;
+      margin-right: 170px;
+    }
+
+    .task-title {
+      margin: 0 0 6px;
+      font-size: 18px;
+      font-weight: 800;
+      word-break: break-word;
+    }
+
+    .task-desc {
+      margin: 0 0 8px;
+      color: #64748b;
+      word-break: break-word;
+    }
+
+    .task-actions {
+      float: right;
+      width: 160px;
+      text-align: right;
+    }
+
+    .task-actions button {
+      margin-left: 4px;
+      padding: 7px 10px;
+    }
+
+    .badge {
+      display: inline-block;
+      margin-right: 6px;
+      margin-top: 3px;
+      border: 1px solid #dbe3ef;
+      border-radius: 999px;
+      padding: 4px 8px;
+      color: #64748b;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .priority-low { color: #16a34a; border-color: #86efac; }
+    .priority-medium { color: #d97706; border-color: #fcd34d; }
+    .priority-high { color: #dc2626; border-color: #fca5a5; }
+
+    .empty {
+      padding: 44px 14px;
+      text-align: center;
+      color: #64748b;
+    }
+
+    .empty strong {
+      display: block;
+      margin-bottom: 4px;
+      color: #172033;
+      font-size: 18px;
+    }
+
+    body.dark .empty strong {
+      color: #f8fafc;
+    }
+
+    .status {
+      overflow: hidden;
+      padding: 12px 14px;
+      border-top: 1px solid #dbe3ef;
+      color: #64748b;
+      font-size: 13px;
+      font-weight: 700;
+      background: #f8fafc;
+    }
+
+    #countText {
+      float: left;
+      line-height: 35px;
+    }
+
+    #clearCompletedBtn {
+      float: right;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    @media screen and (max-width: 760px) {
+      .hero-text, .hero-actions {
+        display: block;
+        width: auto;
+        text-align: left;
+      }
+
+      .hero-actions {
+        margin-top: 12px;
+      }
+
+      h1 {
+        font-size: 34px;
+      }
+
+      .field, .field.wide {
+        float: none;
+        width: 100%;
+        margin-bottom: 10px;
+      }
+
+      .filters, .sorter, .form-note, .buttons-right, #countText, #clearCompletedBtn {
+        float: none;
+        display: block;
+        width: 100%;
+        margin-top: 8px;
+      }
+
+      .sorter select {
+        width: 100%;
+        margin-left: 0;
+        margin-top: 5px;
+      }
+
+      .task-actions {
+        float: none;
+        width: auto;
+        margin: 10px 0 0 34px;
+        text-align: left;
+      }
+
+      .task-main {
+        margin-right: 0;
+      }
+    }
+  </style>
+</head>
+<body onload="initApp()">
+  <div class="app">
+    <div class="hero">
+      <div class="hero-text">
+        <h1>Simple Task App</h1>
+        <p class="subtitle">A portable Windows task app: add, organize, edit, complete, filter, and sort tasks with local saving.</p>
+      </div>
+      <div class="hero-actions">
+        <button id="themeBtn" onclick="toggleTheme()">Dark mode</button>
+        <button class="danger" onclick="clearAllTasks()">Clear all</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="form">
+        <div class="row">
+          <div class="field wide">
+            <label for="titleInput">Task title *</label>
+            <input id="titleInput" type="text" placeholder="e.g. Finish project report" />
+          </div>
+          <div class="field">
+            <label for="dueInput">Due date</label>
+            <input id="dueInput" type="text" placeholder="YYYY-MM-DD" />
+          </div>
+          <div class="field">
+            <label for="priorityInput">Priority</label>
+            <select id="priorityInput">
+              <option value="low">Low</option>
+              <option value="medium" selected>Medium</option>
+              <option value="high">High</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="field wide" style="width:100%;">
+            <label for="descInput">Description optional</label>
+            <textarea id="descInput" placeholder="Add details, notes, or context"></textarea>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <span class="form-note" id="formNote">Tasks are saved automatically on this Windows PC.</span>
+          <div class="buttons-right">
+            <button id="cancelBtn" class="hidden" onclick="cancelEdit()">Cancel edit</button>
+            <button class="primary" id="saveBtn" onclick="saveTask()">Add task</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <div class="filters">
+          <button id="filterAll" class="active" onclick="setFilter('all')">All</button>
+          <button id="filterActive" onclick="setFilter('active')">Active</button>
+          <button id="filterCompleted" onclick="setFilter('completed')">Completed</button>
+        </div>
+        <div class="sorter">
+          Sort
+          <select id="sortInput" onchange="setSort(this.value)">
+            <option value="date">By date</option>
+            <option value="priority">By priority</option>
+            <option value="name">By name</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="taskList"></div>
+      <div id="emptyState" class="empty hidden"><strong>No tasks to show.</strong>Add a task or change the filter.</div>
+
+      <div class="status">
+        <span id="countText">0 tasks</span>
+        <button id="clearCompletedBtn" class="danger" onclick="clearCompletedTasks()">Clear completed</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    // Beginner-friendly plain JavaScript for the Windows HTA version.
+    var tasks = [];
+    var currentFilter = "all";
+    var currentSort = "date";
+    var editingId = null;
+    var darkMode = false;
+    var storageFile = "";
+
+    function initApp() {
+      try { window.resizeTo(980, 780); } catch (ignore) {}
+      storageFile = getStorageFilePath();
+      loadData();
+      renderTasks();
+      updateTheme();
+      document.getElementById("titleInput").focus();
+    }
+
+    function saveTask() {
+      var title = trim(document.getElementById("titleInput").value);
+      if (title === "") {
+        alert("Please enter a task title.");
+        return;
+      }
+
+      var taskData = {
+        title: title,
+        description: trim(document.getElementById("descInput").value),
+        dueDate: trim(document.getElementById("dueInput").value),
+        priority: document.getElementById("priorityInput").value
+      };
+
+      if (editingId) {
+        for (var i = 0; i < tasks.length; i++) {
+          if (tasks[i].id === editingId) {
+            tasks[i].title = taskData.title;
+            tasks[i].description = taskData.description;
+            tasks[i].dueDate = taskData.dueDate;
+            tasks[i].priority = taskData.priority;
+            tasks[i].updatedAt = new Date().getTime();
+            break;
+          }
+        }
+        cancelEdit();
+      } else {
+        taskData.id = String(new Date().getTime()) + "_" + Math.floor(Math.random() * 100000);
+        taskData.completed = false;
+        taskData.createdAt = new Date().getTime();
+        taskData.updatedAt = taskData.createdAt;
+        tasks.push(taskData);
+        clearForm();
+      }
+
+      saveData();
+      renderTasks();
+    }
+
+    function toggleComplete(id) {
+      for (var i = 0; i < tasks.length; i++) {
+        if (tasks[i].id === id) {
+          tasks[i].completed = !tasks[i].completed;
+          tasks[i].updatedAt = new Date().getTime();
+          break;
+        }
+      }
+      saveData();
+      renderTasks();
+    }
+
+    function editTask(id) {
+      var task = findTask(id);
+      if (!task) return;
+
+      editingId = id;
+      document.getElementById("titleInput").value = task.title || "";
+      document.getElementById("descInput").value = task.description || "";
+      document.getElementById("dueInput").value = task.dueDate || "";
+      document.getElementById("priorityInput").value = task.priority || "medium";
+      document.getElementById("saveBtn").innerHTML = "Save changes";
+      document.getElementById("cancelBtn").className = "";
+      document.getElementById("formNote").innerHTML = "Editing a task. Save changes or cancel edit.";
+      document.getElementById("titleInput").focus();
+      window.scrollTo(0, 0);
+    }
+
+    function deleteTask(id) {
+      if (!confirm("Delete this task?")) return;
+      var remaining = [];
+      for (var i = 0; i < tasks.length; i++) {
+        if (tasks[i].id !== id) remaining.push(tasks[i]);
+      }
+      tasks = remaining;
+      if (editingId === id) cancelEdit();
+      saveData();
+      renderTasks();
+    }
+
+    function cancelEdit() {
+      editingId = null;
+      clearForm();
+      document.getElementById("saveBtn").innerHTML = "Add task";
+      document.getElementById("cancelBtn").className = "hidden";
+      document.getElementById("formNote").innerHTML = "Tasks are saved automatically on this Windows PC.";
+    }
+
+    function clearForm() {
+      document.getElementById("titleInput").value = "";
+      document.getElementById("descInput").value = "";
+      document.getElementById("dueInput").value = "";
+      document.getElementById("priorityInput").value = "medium";
+    }
+
+    function setFilter(filter) {
+      currentFilter = filter;
+      document.getElementById("filterAll").className = filter === "all" ? "active" : "";
+      document.getElementById("filterActive").className = filter === "active" ? "active" : "";
+      document.getElementById("filterCompleted").className = filter === "completed" ? "active" : "";
+      renderTasks();
+    }
+
+    function setSort(sortValue) {
+      currentSort = sortValue;
+      renderTasks();
+    }
+
+    function toggleTheme() {
+      darkMode = !darkMode;
+      updateTheme();
+      saveData();
+    }
+
+    function updateTheme() {
+      document.body.className = darkMode ? "dark" : "";
+      document.getElementById("themeBtn").innerHTML = darkMode ? "Light mode" : "Dark mode";
+    }
+
+    function clearCompletedTasks() {
+      var remaining = [];
+      for (var i = 0; i < tasks.length; i++) {
+        if (!tasks[i].completed) remaining.push(tasks[i]);
+      }
+      tasks = remaining;
+      cancelEdit();
+      saveData();
+      renderTasks();
+    }
+
+    function clearAllTasks() {
+      if (tasks.length === 0) return;
+      if (!confirm("Delete all tasks?")) return;
+      tasks = [];
+      cancelEdit();
+      saveData();
+      renderTasks();
+    }
+
+    function renderTasks() {
+      var visible = getVisibleTasks();
+      var html = "";
+
+      for (var i = 0; i < visible.length; i++) {
+        html += taskHtml(visible[i]);
+      }
+
+      document.getElementById("taskList").innerHTML = html;
+      document.getElementById("emptyState").className = visible.length ? "empty hidden" : "empty";
+
+      var activeCount = 0;
+      for (var j = 0; j < tasks.length; j++) {
+        if (!tasks[j].completed) activeCount++;
+      }
+      var completedCount = tasks.length - activeCount;
+      document.getElementById("countText").innerHTML = tasks.length + " total • " + activeCount + " active • " + completedCount + " completed";
+    }
+
+    function getVisibleTasks() {
+      var visible = [];
+      for (var i = 0; i < tasks.length; i++) {
+        if (currentFilter === "active" && tasks[i].completed) continue;
+        if (currentFilter === "completed" && !tasks[i].completed) continue;
+        visible.push(tasks[i]);
+      }
+
+      visible.sort(function (a, b) {
+        if (currentSort === "name") {
+          return String(a.title || "").toLowerCase() > String(b.title || "").toLowerCase() ? 1 : -1;
+        }
+        if (currentSort === "priority") {
+          var rank = { high: 3, medium: 2, low: 1 };
+          return (rank[b.priority] || 0) - (rank[a.priority] || 0);
+        }
+        var aDate = a.dueDate || "9999-12-31";
+        var bDate = b.dueDate || "9999-12-31";
+        if (aDate === bDate) return (b.createdAt || 0) - (a.createdAt || 0);
+        return aDate > bDate ? 1 : -1;
+      });
+
+      return visible;
+    }
+
+    function taskHtml(task) {
+      var priority = task.priority || "medium";
+      var priorityText = priority.charAt(0).toUpperCase() + priority.substr(1);
+      var checked = task.completed ? " checked" : "";
+      var completedClass = task.completed ? " completed" : "";
+      var desc = task.description ? '<p class="task-desc">' + escapeHtml(task.description) + '</p>' : "";
+      var due = task.dueDate ? escapeHtml(task.dueDate) : "No due date";
+      var status = task.completed ? "Completed" : "Active";
+
+      return '' +
+        '<div class="task-card' + completedClass + '">' +
+          '<div class="task-check"><input type="checkbox" onclick="toggleComplete(\'' + task.id + '\')"' + checked + ' /></div>' +
+          '<div class="task-actions">' +
+            '<button onclick="editTask(\'' + task.id + '\')">Edit</button>' +
+            '<button class="danger" onclick="deleteTask(\'' + task.id + '\')">Delete</button>' +
+          '</div>' +
+          '<div class="task-main">' +
+            '<h2 class="task-title">' + escapeHtml(task.title) + '</h2>' +
+            desc +
+            '<span class="badge priority-' + priority + '">● ' + priorityText + '</span>' +
+            '<span class="badge">Due: ' + due + '</span>' +
+            '<span class="badge">' + status + '</span>' +
+          '</div>' +
+        '</div>';
+    }
+
+    function findTask(id) {
+      for (var i = 0; i < tasks.length; i++) {
+        if (tasks[i].id === id) return tasks[i];
+      }
+      return null;
+    }
+
+    function getStorageFilePath() {
+      try {
+        var shell = new ActiveXObject("WScript.Shell");
+        var fso = new ActiveXObject("Scripting.FileSystemObject");
+        var appData = shell.ExpandEnvironmentStrings("%APPDATA%");
+        var folder = appData + "\\SimpleTaskApp";
+        if (!fso.FolderExists(folder)) fso.CreateFolder(folder);
+        return folder + "\\tasks.json";
+      } catch (error) {
+        return "";
+      }
+    }
+
+    function loadData() {
+      try {
+        var text = "";
+        if (storageFile !== "") {
+          var fso = new ActiveXObject("Scripting.FileSystemObject");
+          if (fso.FileExists(storageFile)) {
+            var file = fso.OpenTextFile(storageFile, 1, false);
+            text = file.ReadAll();
+            file.Close();
+          }
+        } else if (window.localStorage) {
+          text = localStorage.getItem("simple-task-app-windows") || "";
+        }
+
+        if (text !== "") {
+          var data = JSON.parse(text);
+          tasks = data.tasks || [];
+          darkMode = !!data.darkMode;
+        }
+      } catch (error) {
+        tasks = [];
+        darkMode = false;
+      }
+    }
+
+    function saveData() {
+      var data = JSON.stringify({ tasks: tasks, darkMode: darkMode });
+      try {
+        if (storageFile !== "") {
+          var fso = new ActiveXObject("Scripting.FileSystemObject");
+          var file = fso.OpenTextFile(storageFile, 2, true);
+          file.Write(data);
+          file.Close();
+        } else if (window.localStorage) {
+          localStorage.setItem("simple-task-app-windows", data);
+        }
+      } catch (error) {
+        alert("Could not save tasks. Please check Windows permissions.");
+      }
+    }
+
+    function trim(text) {
+      return String(text || "").replace(/^\s+|\s+$/g, "");
+    }
+
+    function escapeHtml(text) {
+      return String(text || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/\"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+  </script>
+</body>
+</html>
